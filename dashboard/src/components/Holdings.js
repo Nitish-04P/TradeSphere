@@ -10,18 +10,78 @@ const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
   const generalContext = useContext(GeneralContext);
 
- useEffect(() => {
-  const userId = localStorage.getItem("userId");
+useEffect(() => {
+  const token = localStorage.getItem("token");
 
   axios
-    .get("http://localhost:3002/allHoldings")
+    .get("http://localhost:3002/allHoldings", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then((res) => {
       setAllHoldings(res.data);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+    });
 }, []);
 
   // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  // Total Investment
+const totalInvestment = allHoldings.reduce(
+  (total, stock) => total + stock.avg * stock.qty,
+  0
+);
+
+// Current Portfolio Value
+const currentValue = allHoldings.reduce(
+  (total, stock) => total + stock.price * stock.qty,
+  0
+);
+
+// Overall Profit / Loss
+const totalPL = currentValue - totalInvestment;
+
+// Profit Percentage
+const profitPercent =
+  totalInvestment > 0
+    ? ((totalPL / totalInvestment) * 100).toFixed(2)
+    : 0;
+    // Total Holdings
+const totalHoldings = allHoldings.length;
+
+// Profit Stocks
+const profitStocks = allHoldings.filter(
+  (stock) => stock.price > stock.avg
+).length;
+
+// Loss Stocks
+const lossStocks = allHoldings.filter(
+  (stock) => stock.price < stock.avg
+).length;
+
+// Best Performer
+const bestStock =
+  allHoldings.length > 0
+    ? allHoldings.reduce((best, current) =>
+        ((current.price - current.avg) / current.avg) >
+        ((best.price - best.avg) / best.avg)
+          ? current
+          : best
+      )
+    : null;
+
+// Worst Performer
+const worstStock =
+  allHoldings.length > 0
+    ? allHoldings.reduce((worst, current) =>
+        ((current.price - current.avg) / current.avg) <
+        ((worst.price - worst.avg) / worst.avg)
+          ? current
+          : worst
+      )
+    : null;
   const labels = allHoldings.map((subArray) => subArray["name"]);
 
   const data = {
@@ -105,23 +165,78 @@ const Holdings = () => {
       </div>
 
       <div className="row">
-        <div className="col">
-          <h5>
-            29,875.<span>55</span>{" "}
-          </h5>
-          <p>Total investment</p>
-        </div>
-        <div className="col">
-          <h5>
-            31,428.<span>95</span>{" "}
-          </h5>
-          <p>Current value</p>
-        </div>
-        <div className="col">
-          <h5>1,553.40 (+5.20%)</h5>
-          <p>P&L</p>
-        </div>
-      </div>
+  <div className="col">
+    <h5>₹ {totalInvestment.toFixed(2)}</h5>
+    <p>Total Investment</p>
+  </div>
+
+  <div className="col">
+    <h5>₹ {currentValue.toFixed(2)}</h5>
+    <p>Current Value</p>
+  </div>
+
+  <div className="col">
+    <h5
+      style={{
+        color: totalPL >= 0 ? "green" : "red",
+      }}
+    >
+      ₹ {totalPL.toFixed(2)}
+    </h5>
+
+    <p>{profitPercent}% Overall P&L</p>
+  </div>
+</div>
+      <div
+  className="card mt-4 p-3"
+  style={{
+    borderRadius: "12px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  }}
+>
+  <h4>Portfolio Summary</h4>
+
+  <div className="row mt-3">
+
+    <div className="col-md-4">
+      <h6>Total Holdings</h6>
+      <p>{totalHoldings}</p>
+    </div>
+
+    <div className="col-md-4">
+      <h6>Profitable Stocks</h6>
+      <p style={{ color: "green" }}>
+        {profitStocks}
+      </p>
+    </div>
+
+    <div className="col-md-4">
+      <h6>Loss Making Stocks</h6>
+      <p style={{ color: "red" }}>
+        {lossStocks}
+      </p>
+    </div>
+
+    <div className="col-md-6 mt-3">
+      <h6>Best Performer</h6>
+      <p>
+        {bestStock
+          ? bestStock.name
+          : "-"}
+      </p>
+    </div>
+
+    <div className="col-md-6 mt-3">
+      <h6>Worst Performer</h6>
+      <p>
+        {worstStock
+          ? worstStock.name
+          : "-"}
+      </p>
+    </div>
+
+  </div>
+</div>
       <VerticalGraph data={data} />
     </>
   );

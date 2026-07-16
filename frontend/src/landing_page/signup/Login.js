@@ -7,6 +7,7 @@ function Login() {
     password: "",
   });
 
+ 
   const handleChange = (e) => {
     setUser({
       ...user,
@@ -22,6 +23,8 @@ function Login() {
         "http://localhost:3002/login",
         user
       );
+     console.log("LOGIN RESPONSE");
+console.log(res.data);
 
       localStorage.setItem(
         "token",

@@ -1,25 +1,35 @@
 import React, { useState } from "react";
-
 import { Link } from "react-router-dom";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
+  const userName = localStorage.getItem("userName") || "Guest";
+
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
   };
 
-  const handleProfileClick = (index) => {
+  const handleProfileClick = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
+
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userId");
+  localStorage.removeItem("userName");
+
+  window.location.href = "http://localhost:3000";
+};
 
   const menuClass = "menu";
   const activeMenuClass = "menu selected";
 
   return (
     <div className="menu-container">
-      <img src="logo.png" style={{ width: "50px" }} />
+      <img src="logo.png" style={{ width: "50px" }} alt="Logo" />
+
       <div className="menus">
         <ul>
           <li>
@@ -33,6 +43,7 @@ const Menu = () => {
               </p>
             </Link>
           </li>
+
           <li>
             <Link
               style={{ textDecoration: "none" }}
@@ -44,6 +55,7 @@ const Menu = () => {
               </p>
             </Link>
           </li>
+
           <li>
             <Link
               style={{ textDecoration: "none" }}
@@ -55,6 +67,7 @@ const Menu = () => {
               </p>
             </Link>
           </li>
+
           <li>
             <Link
               style={{ textDecoration: "none" }}
@@ -66,10 +79,11 @@ const Menu = () => {
               </p>
             </Link>
           </li>
+
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="funds"
+              to="/funds"
               onClick={() => handleMenuClick(4)}
             >
               <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
@@ -77,49 +91,52 @@ const Menu = () => {
               </p>
             </Link>
           </li>
+
           <li>
             <Link
               style={{ textDecoration: "none" }}
               to="/apps"
-              onClick={() => handleMenuClick(6)}
+              onClick={() => handleMenuClick(5)}
             >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
+              <p className={selectedMenu === 5 ? activeMenuClass : menuClass}>
                 Apps
               </p>
             </Link>
           </li>
         </ul>
-        <hr />
-        <div className="profile" onClick={handleProfileClick}>
-  <div className="avatar">ZU</div>
-  <p className="username">USERID</p>
-</div>
 
-{isProfileDropdownOpen && (
-  <div
-    style={{
-      position: "absolute",
-      right: "20px",
-      top: "70px",
-      background: "#fff",
-      border: "1px solid #ddd",
-      padding: "10px",
-      borderRadius: "5px",
-      boxShadow: "0px 2px 10px rgba(0,0,0,0.2)",
-      zIndex: 999,
-    }}
-  >
-    <button
-      className="btn btn-danger"
-      onClick={() => {
-        localStorage.removeItem("token");
-        window.location.href = "http://localhost:3000/login";
-      }}
-    >
-      Logout
-    </button>
-  </div>
-)}
+        <hr />
+
+        <div className="profile" onClick={handleProfileClick}>
+          <div className="avatar">
+            {userName.charAt(0).toUpperCase()}
+          </div>
+
+          <p className="username">{userName}</p>
+        </div>
+
+        {isProfileDropdownOpen && (
+          <div
+            style={{
+              position: "absolute",
+              right: "20px",
+              top: "70px",
+              background: "#fff",
+              border: "1px solid #ddd",
+              padding: "10px",
+              borderRadius: "5px",
+              boxShadow: "0px 2px 10px rgba(0,0,0,0.2)",
+              zIndex: 999,
+            }}
+          >
+            <button
+              className="btn btn-danger"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

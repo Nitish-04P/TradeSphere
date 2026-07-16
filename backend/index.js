@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const authMiddleware = require("./middleware/authMiddleware");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -131,6 +131,7 @@ app.get("/addHoldings", async (req, res) => {
       net: "+18.08%",
       day: "+0.32%",
     },
+    
   ];
 
   await HoldingsModel.insertMany(tempHoldings);
@@ -166,17 +167,9 @@ app.get("/addPositions", async (req, res) => {
 });
 
 app.get("/allHoldings", async (req, res) => {
-  try {
-    const holdings = await HoldingsModel.find({});
+  const holdings = await HoldingsModel.find({});
 
-    res.json(holdings);
-  } catch (err) {
-    console.log(err);
-
-    res.status(500).json({
-      message: "Server Error",
-    });
-  }
+  res.json(holdings);
 });
 
 app.get("/allPositions", async (req, res) => {

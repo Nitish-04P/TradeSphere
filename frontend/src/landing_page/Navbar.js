@@ -12,7 +12,7 @@ function Navbar() {
           <img
             src="media/images/logo.png"
             style={{ width: "200px", height: "auto" }}
-            alt="Logo"
+            alt="TradeSphere Logo"
           />
         </Link>
 
@@ -35,13 +35,19 @@ function Navbar() {
           <ul className="navbar-nav ms-auto mb-lg-0 align-items-center">
 
             <li className="nav-item me-2">
-              <Link className="btn btn-outline-primary" to="/login">
+              <Link
+                className="btn btn-outline-primary"
+                to="/login"
+              >
                 Login
               </Link>
             </li>
 
             <li className="nav-item me-4">
-              <Link className="btn btn-primary" to="/signup">
+              <Link
+                className="btn btn-primary"
+                to="/signup"
+              >
                 Signup
               </Link>
             </li>
@@ -54,7 +60,7 @@ function Navbar() {
 
             <li className="nav-item">
               <Link className="nav-link" to="/product">
-                Product
+                Products
               </Link>
             </li>
 
