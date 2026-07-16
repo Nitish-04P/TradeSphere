@@ -91,9 +91,35 @@ const Menu = () => {
         </ul>
         <hr />
         <div className="profile" onClick={handleProfileClick}>
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
-        </div>
+  <div className="avatar">ZU</div>
+  <p className="username">USERID</p>
+</div>
+
+{isProfileDropdownOpen && (
+  <div
+    style={{
+      position: "absolute",
+      right: "20px",
+      top: "70px",
+      background: "#fff",
+      border: "1px solid #ddd",
+      padding: "10px",
+      borderRadius: "5px",
+      boxShadow: "0px 2px 10px rgba(0,0,0,0.2)",
+      zIndex: 999,
+    }}
+  >
+    <button
+      className="btn btn-danger"
+      onClick={() => {
+        localStorage.removeItem("token");
+        window.location.href = "http://localhost:3000/login";
+      }}
+    >
+      Logout
+    </button>
+  </div>
+)}
       </div>
     </div>
   );

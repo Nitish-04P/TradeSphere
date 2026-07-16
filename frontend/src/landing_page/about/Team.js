@@ -12,18 +12,15 @@ function Team() {
         style={{ lineHeight: "1.8", fontSize: "1.2em" }}
       >
         <div className="col-6 p-3 text-center">
-          <img
-            src="media/images/nithinKamath.jpg"
-            style={{ borderRadius: "100%", width: "50%" }}
-          />
+          
           <h4 className="mt-5">Nithin Kamath</h4>
           <h6>Founder, CEO</h6>
         </div>
         <div className="col-6 p-3">
           <p>
-            Nithin bootstrapped and founded Zerodha in 2010 to overcome the
+            Nithin bootstrapped and founded TradeSphere in 2010 to overcome the
             hurdles he faced during his decade long stint as a trader. Today,
-            Zerodha has changed the landscape of the Indian broking industry.
+            TradeSphere a has changed the landscape of the Indian broking industry.
           </p>
           <p>
             He is a member of the SEBI Secondary Market Advisory Committee

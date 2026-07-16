@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from "react";
 import axios, { all } from "axios";
 import { VerticalGraph } from "./VerticalGraph";
+import { useContext } from "react";
+import GeneralContext from "./GeneralContext";
 
 // import { holdings } from "../data/data";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
+  const generalContext = useContext(GeneralContext);
 
-  useEffect(() => {
-    axios.get("http://localhost:3002/allHoldings").then((res) => {
-      // console.log(res.data);
+ useEffect(() => {
+  const userId = localStorage.getItem("userId");
+
+  axios
+    .get("http://localhost:3002/allHoldings")
+    .then((res) => {
       setAllHoldings(res.data);
-    });
-  }, []);
+    })
+    .catch((err) => console.log(err));
+}, []);
 
   // const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   const labels = allHoldings.map((subArray) => subArray["name"]);
@@ -59,6 +66,7 @@ const Holdings = () => {
             <th>P&L</th>
             <th>Net chg.</th>
             <th>Day chg.</th>
+            <th>Analytics</th>
           </tr>
 
           {allHoldings.map((stock, index) => {
@@ -79,6 +87,17 @@ const Holdings = () => {
                 </td>
                 <td className={profClass}>{stock.net}</td>
                 <td className={dayClass}>{stock.day}</td>
+
+                <td>
+                  <button
+                    className="btn btn-sm btn-primary"
+                    onClick={() =>
+                    generalContext.openAnalyticsWindow(stock)
+                  }
+                 >
+                  📊 Analytics
+                </button>
+                </td>
               </tr>
             );
           })}

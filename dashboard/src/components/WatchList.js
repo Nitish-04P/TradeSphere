@@ -19,6 +19,7 @@ import { DoughnutChart } from "./DoughnoutChart";
 const labels = watchlist.map((subArray) => subArray["name"]);
 
 const WatchList = () => {
+  const [search, setSearch] = useState("");
   const data = {
     labels,
     datasets: [
@@ -72,22 +73,28 @@ const WatchList = () => {
   //   },
   // ],
   // };
-
+  const filteredStocks = watchlist.filter((stock) =>
+  stock.name.toLowerCase().includes(search.toLowerCase())
+);
   return (
     <div className="watchlist-container">
       <div className="search-container">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Search eg:infy, bse, nifty fut weekly, gold mcx"
-          className="search"
-        />
-        <span className="counts"> {watchlist.length} / 50</span>
+       <input
+        type="text"
+        name="search"
+        id="search"
+        placeholder="Search eg: infy, bse, nifty fut weekly, gold mcx"
+        className="search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+        <span className="counts">
+          {filteredStocks.length} / {watchlist.length}
+        </span>
       </div>
 
       <ul className="list">
-        {watchlist.map((stock, index) => {
+        {filteredStocks.map((stock, index) => {
           return <WatchListItem stock={stock} key={index} />;
         })}
       </ul>
@@ -135,6 +142,9 @@ const WatchListActions = ({ uid }) => {
   const handleBuyClick = () => {
     generalContext.openBuyWindow(uid);
   };
+  const handleSellClick = () => {
+  generalContext.openSellWindow(uid);
+};
 
   return (
     <span className="actions">
@@ -148,12 +158,13 @@ const WatchListActions = ({ uid }) => {
         >
           <button className="buy">Buy</button>
         </Tooltip>
-        <Tooltip
-          title="Sell (S)"
-          placement="top"
-          arrow
-          TransitionComponent={Grow}
-        >
+       <Tooltip
+        title="Sell (S)"
+        placement="top"
+        arrow
+        TransitionComponent={Grow}
+        onClick={handleSellClick}
+      >
           <button className="sell">Sell</button>
         </Tooltip>
         <Tooltip
